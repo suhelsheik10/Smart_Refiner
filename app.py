@@ -7,7 +7,10 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin
 import time
 import os
-# from dotenv import load_dotenv # Commented out: .env file loading is not working for this local setup
+from dotenv import load_dotenv # Import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # --- Streamlit Page Configuration (MUST be the first Streamlit command) ---
 st.set_page_config(
@@ -62,7 +65,7 @@ st.markdown(
         color: #C8E6C9; /* Lighter text color */
         border-radius: 8px;
         padding: 12px 15px;
-        box_shadow: 0 2px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     /* Adjust margins for Streamlit components to ensure better spacing */
@@ -106,25 +109,25 @@ st.markdown(
     
     /* Better styling for the markdown intro text */
     p {
-        line-height: 1.6;
-        font-size: 1.05rem;
+        line_height: 1.6;
+        font_size: 1.05rem;
         color: #E0E0E0; /* Light text for global paragraphs */
     }
 
     /* Adjusting markdown headers for better visual hierarchy on dark theme */
-    h1 { font-size: 2.5rem; color: #BB86FC; margin-bottom: 1.5rem; } /* Main title */
-    h2 { font-size: 2rem; color: #E0E0E0; margin-top: 2rem; margin-bottom: 1rem; }
-    h3 { font-size: 1.75rem; color: #444444; margin-top: 1.5rem; margin-bottom: 0.8rem; }
-    h4 { font-size: 1.5rem; color: #555555; margin-top: 1.2rem; margin-bottom: 0.6rem; }
-    h5 { font-size: 1.25rem; color: #BB86FC; margin-top: 1rem; margin-bottom: 0.5rem; }
+    h1 { font_size: 2.5rem; color: #BB86FC; margin_bottom: 1.5rem; } /* Main title */
+    h2 { font_size: 2rem; color: #E0E0E0; margin_top: 2rem; margin_bottom: 1rem; }
+    h3 { font_size: 1.75rem; color: #444444; margin_top: 1.5rem; margin_bottom: 0.8rem; }
+    h4 { font_size: 1.5rem; color: #555555; margin_top: 1.2rem; margin_bottom: 0.6rem; }
+    h5 { font_size: 1.25rem; color: #BB86FC; margin_top: 1rem; margin_bottom: 0.5rem; }
 
     /* Centering the chatbot input */
     .stChatInput {
-        text-align: center;
+        text_align: center;
     }
     .stChatInput > div > div {
         margin: 0 auto;
-        max-width: 700px;
+        max_width: 700px;
     }
     /* Chat messages text color */
     .stChatMessage {
@@ -308,7 +311,7 @@ def get_contact_info_from_website(website_url):
     return linkedin_url, general_email, status
 
 # --- Streamlit Application Layout & Logic ---
-st.image("caprae_capital_logo.png", width=150) # CORRECTED LOGO FILENAME HERE
+st.image("caprae_capital_logo.png", width=150) # Assuming this file is in the same directory
 st.title("Caprae Capital: AI Lead Refiner 🚀")
 st.markdown("""
 <p style='font-size:1.1rem; line-height:1.6; color:#E0E0E0;'>
@@ -337,6 +340,9 @@ with col2:
         st.session_state.uploaded_file_name = uploaded_file.name
         try:
             df = pd.read_csv(uploaded_file)
+            # DEBUG: Print columns right after reading
+            print(f"DEBUG: Columns detected in uploaded CSV: {df.columns.tolist()}")
+            
             if df.empty:
                 st.error("The uploaded CSV file is empty. Please upload a file with data.")
                 st.session_state.processed_data = None
@@ -360,9 +366,18 @@ with col2:
                         for i, row in df.iterrows():
                             refined_part = refine_lead(row, ai_kws, industry_kws, pain_kws).to_dict()
                             scraped_linkedin, scraped_email, scrape_status = get_contact_info_from_website(row.get('website_url', ''))
+                            
+                            # DEBUG: Print scraped LinkedIn and Email for each company
+                            print(f"DEBUG: Company: {row.get('company_name', 'N/A')}, Scraped LinkedIn: {scraped_linkedin}, Scraped Email: {scraped_email}, Scraping Status: {scrape_status}")
+                            
                             combined_row = row.to_dict()
                             combined_row.update(refined_part)
-                            combined_row['contact_linkedin_url'] = scraped_linkedin
+                            # Ensure 'http' or 'https' is present for valid links
+                            if scraped_linkedin != "Not Found" and not scraped_linkedin.startswith(('http://', 'https://')):
+                                combined_row['contact_linkedin_url'] = 'https://' + scraped_linkedin
+                            else:
+                                combined_row['contact_linkedin_url'] = scraped_linkedin
+
                             combined_row['contact_email_general'] = scraped_email
                             combined_row['scraping_status'] = scrape_status
                             results.append(combined_row)
@@ -485,7 +500,7 @@ st.markdown("<p style='text-align:center; color:#B0B0B0; font-size:0.9rem;'>✨ 
 st.divider()
 
 # Chatbot Integration
-st.header("Caprae AI Assistant 💬")
+st.header("Caprae AI Assistant �")
 st.markdown("<p style='font-size:1rem; color:#B0B0B0;'>Ask the AI Assistant questions about AI, industries, or anything else!</p>", unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
@@ -495,12 +510,12 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 def generate_response_sync(prompt_text_sync, history_sync):
-    # Retrieve API key: HARDCODED FOR LOCAL FUNCTIONALITY (INSECURE for deployment)
-    api_key = "AIzaSyDxZkvUZHpr7h6IEumG0rCCweviazEt4fA" # YOUR API KEY HARDCODED HERE
+    # Retrieve API key securely from environment variables
+    api_key = os.getenv("GOOGLE_API_KEY") 
     
     if not api_key: 
-        print("Error: GOOGLE_API_KEY is not set (hardcoded key is empty).")
-        return "API key not found. Please ensure the API key is correctly hardcoded for local testing."
+        print("Error: GOOGLE_API_KEY environment variable is not set.")
+        return "API key not found. Please ensure the GOOGLE_API_KEY environment variable is set in your .env file."
 
     payload_sync = {"contents": history_sync}
     apiUrl_sync = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
@@ -520,7 +535,6 @@ def generate_response_sync(prompt_text_sync, history_sync):
 
         if result_sync.get("candidates") and result_sync["candidates"][0].get("content") and \
            result_sync["candidates"][0]["content"].get("parts") and result_sync["candidates"][0]["content"]["parts"][0].get("text"):
-            # CORRECTED LINE: Use square bracket notation for dictionary access
             return result_sync["candidates"][0]["content"]["parts"][0]["text"]
         else:
             if result_sync.get("promptFeedback") and result_sync["promptFeedback"].get("blockReason"):
@@ -533,7 +547,7 @@ def generate_response_sync(prompt_text_sync, history_sync):
     except requests.exceptions.RequestException as e:
         if isinstance(e, requests.exceptions.HTTPError):
             print(f"API HTTP Error: Status Code {e.response.status_code}, Response: {e.response.text}")
-            return f"Sorry, the AI encountered an HTTP error: Status {e.response.status_code}. Please check your API key or ensure billing is enabled in Google Cloud."
+            return f"Sorry, the AI encountered an HTTP error: Status {e.response.status_code}. Please check your API key and ensure billing is enabled in Google Cloud."
         elif isinstance(e, requests.exceptions.ConnectionError):
             print(f"API Connection Error: Could not connect to {apiUrl_sync}. Check internet/firewall. Error: {e}")
             return "Sorry, I'm having trouble connecting to the AI. Please check your internet connection."
