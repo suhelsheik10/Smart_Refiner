@@ -83,8 +83,12 @@ Follow these steps to get the AI Lead Refiner up and running on your local machi
 Your input CSV should look similar to this:
 
 ```csv
-company_name,website_url,website_text_snippet,industry
-"Innovate AI Solutions","[https://www.innovateaisolutions.com](https://www.innovateaisolutions.com)","We provide cutting-edge machine learning and deep learning platforms for enterprise clients. Our focus is on intelligent automation and data-driven decision making.","Technology"
-"LogiFlow Inc.","[https://www.logiflow.net](https://www.logiflow.net)","Optimizing supply chain logistics with advanced analytics and predictive modeling to reduce operational costs.","Logistics"
-"HealthTech Pioneers","[https://www.healthtechpioneers.org](https://www.healthtechpioneers.org)","Revolutionizing patient care through AI-powered diagnostics and intelligent medical software.","Healthcare"
-"Manual Processes Ltd.","[https://www.manualprocltd.com](https://www.manualprocltd.com)","We offer traditional consulting services to improve business operations through proven methodologies.","Consulting"
+company_name	website_text_snippet	industry	website_url
+Innovate AI Solutions Co.	We specialize in cutting-edge AI solutions, machine learning platforms, and custom software development. We help businesses automate workflows and enhance decision-making with intelligent systems.	Technology, AI	https://www.accel.com/
+Global Logistics Hub	Optimizing supply chain efficiency with advanced logistics management and predictive analytics for freight. We reduce operational costs and improve delivery times.	Logistics, Supply Chain	https://www.flexport.com/
+MediCare AI Diagnostics	Revolutionizing healthcare with AI-powered diagnostics and patient management systems. Our deep learning algorithms assist in early disease detection.	Healthcare, HealthTech	https://www.medtronic.com/
+FinTech Future Inc.	Leading financial services with AI for fraud detection, secure banking, and algorithmic trading. We ensure robust security and scalable solutions.	Finance, FinTech	https://stripe.com/
+EcoGreen Energy Solutions	Developing smart grid technologies and renewable energy solutions, including solar and wind power. Our focus is on energy efficiency and sustainable development.	Energy, Environment	https://www.nexteraenergy.com/
+Retail AI Insights	Enhancing e-commerce platforms and customer experience through AI-driven personalized recommendations and retail analytics.	Retail, E-commerce	https://www.shopify.com/
+Manufacturing Automation Corp.	Pioneering industrial automation for modern factories, improving production line efficiency with robotics and AI integration for Industry 4.0.	Manufacturing, Robotics	https://www.rockwellautomation.com/
+
