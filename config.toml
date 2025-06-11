@@ -1,0 +1,14 @@
+# .streamlit/config.toml - Dark Theme for Caprae Capital AI Lead Refiner
+
+[theme]
+primaryColor="#BB86FC"  # A soft purple for accent/buttons, stands out on dark
+backgroundColor="#121212" # Very dark background
+secondaryBackgroundColor="#1E1E1E" # Slightly lighter dark for containers/sidebar
+textColor="#E0E0E0"     # Light grey for general text
+font="sans serif"       # Modern and readable font
+
+[global]
+# Uncomment these lines if you want to remove the warning about production deployment
+# and the colored line above headers, respectively.
+# disableProductionWarning = true
+# showColoredLine = false
